@@ -1,0 +1,149 @@
+{
+ "01001": {
+  "label_code": "01001",
+  "label_name": "土豪",
+  "label_type_code": "01",
+  "label_type_name": "资产标签",
+  "label_state": "1"
+ },
+ "01002": {
+  "label_code": "01002",
+  "label_name": "白富美",
+  "label_type_code": "01",
+  "label_type_name": "资产标签",
+  "label_state": "1"
+ },
+ "01003": {
+  "label_code": "01003",
+  "label_name": "高富帅",
+  "label_type_code": "01",
+  "label_type_name": "资产标签",
+  "label_state": "1"
+ },
+ "01004": {
+  "label_code": "01004",
+  "label_name": "潜力股",
+  "label_type_code": "01",
+  "label_type_name": "资产标签",
+  "label_state": "1"
+ },
+ "01005": {
+  "label_code": "01005",
+  "label_name": "月光族",
+  "label_type_code": "01",
+  "label_type_name": "资产标签",
+  "label_state": "1"
+ },
+ "01999": {
+  "label_code": "01999",
+  "label_name": "纯医保",
+  "label_type_code": "01",
+  "label_type_name": "资产标签",
+  "label_state": "1"
+ },
+ "02001": {
+  "label_code": "02001",
+  "label_name": "理财达人",
+  "label_type_code": "02",
+  "label_type_name": "持有产品标签",
+  "label_state": "1"
+ },
+ "02002": {
+  "label_code": "02002",
+  "label_name": "存款达人",
+  "label_type_code": "02",
+  "label_type_name": "持有产品标签",
+  "label_state": "1"
+ },
+ "02003": {
+  "label_code": "02003",
+  "label_name": "交易达人",
+  "label_type_code": "02",
+  "label_type_name": "持有产品标签",
+  "label_state": "1"
+ },
+ "02004": {
+  "label_code": "02004",
+  "label_name": "产品达人",
+  "label_type_code": "02",
+  "label_type_name": "持有产品标签",
+  "label_state": "1"
+ },
+ "02005": {
+  "label_code": "02005",
+  "label_name": "诚信达人",
+  "label_type_code": "02",
+  "label_type_name": "持有产品标签",
+  "label_state": "1"
+ },
+ "02006": {
+  "label_code": "02006",
+  "label_name": "手机达人",
+  "label_type_code": "02",
+  "label_type_name": "持有产品标签",
+  "label_state": "1"
+ },
+ "02007": {
+  "label_code": "02007",
+  "label_name": "网银达人",
+  "label_type_code": "02",
+  "label_type_name": "持有产品标签",
+  "label_state": "1"
+ },
+ "02008": {
+  "label_code": "02008",
+  "label_name": "担保达人",
+  "label_type_code": "02",
+  "label_type_name": "持有产品标签",
+  "label_state": "1"
+ },
+ "03001": {
+  "label_code": "03001",
+  "label_name": "激进型",
+  "label_type_code": "03",
+  "label_type_name": "风险等级标签",
+  "label_state": "1"
+ },
+ "03002": {
+  "label_code": "03002",
+  "label_name": "平衡型",
+  "label_type_code": "03",
+  "label_type_name": "风险等级标签",
+  "label_state": "1"
+ },
+ "03003": {
+  "label_code": "03003",
+  "label_name": "保守型",
+  "label_type_code": "03",
+  "label_type_name": "风险等级标签",
+  "label_state": "1"
+ },
+ "04001": {
+  "label_code": "04001",
+  "label_name": "高收入",
+  "label_type_code": "05",
+  "label_type_name": "收入标签",
+  "label_state": "1"
+ },
+ "06001": {
+  "label_code": "06001",
+  "label_name": "羊毛党",
+  "label_type_code": "06",
+  "label_type_name": "交易情况标签",
+  "label_state": "1"
+ },
+ "06002": {
+  "label_code": "06002",
+  "label_name": "剁手党",
+  "label_type_code": "06",
+  "label_type_name": "交易情况标签",
+  "label_state": "1"
+ },
+ "07001": {
+  "label_code": "07001",
+  "label_name": "企业主",
+  "label_type_code": "07",
+  "label_type_name": "企业主标签",
+  "label_state": "1"
+ }
+}
