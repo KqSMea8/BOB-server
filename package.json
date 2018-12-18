@@ -1,0 +1,60 @@
+{
+  "name": "BOB-server",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "egg": {
+    "typescript": true
+  },
+  "scripts": {
+    "start": "npm run tsc && egg-scripts start --daemon --env=prod --title=egg-server-BOB-server",
+    "stop": "egg-scripts stop --title=egg-server-BOB-server && npm run clean",
+    "dev": "egg-bin dev -r egg-ts-helper/register",
+    "debug": "egg-bin debug -r egg-ts-helper/register",
+    "test-local": "egg-bin test -r egg-ts-helper/register",
+    "test": "npm run lint -- --fix && npm run test-local",
+    "cov": "egg-bin cov -r egg-ts-helper/register",
+    "tsc": "ets && tsc -p tsconfig.json",
+    "ci": "npm run lint && npm run cov && npm run tsc",
+    "autod": "autod",
+    "lint": "tslint --project . -c tslint.json",
+    "clean": "ets clean"
+  },
+  "dependencies": {
+    "egg": "^2.14.1",
+    "egg-scripts": "^2.11.0",
+    "egg-sequelize": "^4.2.0",
+    "mysql2": "^1.6.4",
+    "websocket": "^1.0.28"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.40",
+    "@types/node": "^7.0.12",
+    "@types/supertest": "^2.0.0",
+    "autod": "^3.0.1",
+    "autod-egg": "^1.1.0",
+    "egg-bin": "^4.9.0",
+    "egg-ci": "^1.8.0",
+    "egg-mock": "^3.16.0",
+    "egg-ts-helper": "^1.11.0",
+    "lodash": "^4.17.11",
+    "tslib": "^1.9.3",
+    "tslint": "^4.0.0",
+    "typescript": "^3.2.2"
+  },
+  "engines": {
+    "node": ">=8.9.0"
+  },
+  "ci": {
+    "version": "8"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "eslintIgnore": [
+    "coverage"
+  ],
+  "author": "Gu Xiang",
+  "license": "MIT"
+}

@@ -1,0 +1,3 @@
+[submodule "app/BOB"]
+	path = app/BOB
+	url = https://github.com/Yanlin-Ma/BOB.git
