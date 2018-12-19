@@ -17,18 +17,21 @@ module.exports = (app: Application) => {
   //   '01',
   // ];
 
-  return app.model.define('cust_label_info', {
-    data_date: STRING,
-    cust_core_no: STRING,
-    sex: STRING,
-    age: STRING,
-    birth_date: STRING,
-    constellation: STRING,
-    mobile_phone: STRING,
-    cert_type: STRING,
-    cert_no: STRING,
-    label_code: STRING,
-    label_name: STRING,
-    label_type_code: STRING,
-  });
+  return app.model.define(
+    'cust_label_info',
+    {
+      cust_core_no: STRING,
+      label_code: STRING,
+      label_name: STRING,
+      label_type_code: STRING,
+    },
+    {
+      freezeTableName: true,
+      indexes: [
+        {
+          fields: ['cust_core_no'],
+        },
+      ],
+    },
+  );
 };

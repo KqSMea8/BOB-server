@@ -19,7 +19,7 @@ export default class Customer extends Service {
     const [cust, assetsRatings, debtCardBills, labelInfos] = await Promise.all([
       CustInfo.findOne({
         where: {
-          cust_core_no: custCoreNo,
+          cust_core_no: custCoreNo
         },
       }),
       GCustomerCustAssetsRating.findAll({
@@ -29,15 +29,20 @@ export default class Customer extends Service {
       }),
       GCustomerDebtCardBill.findAll({
         where: {
-          cust_core_no: custCoreNo,
+          cust_core_no: custCoreNo
         },
       }),
       CustLabelInfo.findAll({
         where: {
-          cust_core_no: custCoreNo,
+          cust_core_no: custCoreNo
         },
       }),
     ]);
-    return { ...cust, assetsRatings, debtCardBills, labelInfos };
+    return {
+      ...cust.toJSON(),
+      assetsRatings: assetsRatings.map((o) => o.toJSON()),
+      debtCardBills: debtCardBills.map((o) => o.toJSON()),
+      labelInfos: labelInfos.map((o) => o.toJSON()),
+    };
   }
 }

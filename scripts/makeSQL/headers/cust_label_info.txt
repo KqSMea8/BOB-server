@@ -1,0 +1,1 @@
+cust_core_no,label_code,label_name,label_type_code

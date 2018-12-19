@@ -18,12 +18,14 @@
     "ci": "npm run lint && npm run cov && npm run tsc",
     "autod": "autod",
     "lint": "tslint --project . -c tslint.json",
-    "clean": "ets clean"
+    "clean": "ets clean",
+    "run": "bash scripts/makeSQL/run.sh 127.0.0.1 root 123456"
   },
   "dependencies": {
     "egg": "^2.14.1",
     "egg-scripts": "^2.11.0",
     "egg-sequelize": "^4.2.0",
+    "egg-validate": "^2.0.2",
     "mysql2": "^1.6.4",
     "websocket": "^1.0.28"
   },

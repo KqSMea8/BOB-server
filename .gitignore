@@ -5,6 +5,11 @@ coverage/
 .idea/
 run/
 logs/
+
+!.gitkeep
+scripts/makeSQL/data/
+scripts/makeSQL/sql/
+
 .DS_Store
 .vscode
 *.swp

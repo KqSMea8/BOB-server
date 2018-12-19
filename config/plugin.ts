@@ -1,4 +1,4 @@
-import { EggPlugin } from 'egg';
+import { EggPlugin } from "egg";
 
 const plugin: EggPlugin = {
   // static: true,
@@ -8,8 +8,12 @@ const plugin: EggPlugin = {
   // },
   sequelize: {
     enable: true,
-    package: 'egg-sequelize',
+    package: "egg-sequelize"
   },
+  validate: {
+    enable: true,
+    package: "egg-validate"
+  }
 };
 
 export default plugin;

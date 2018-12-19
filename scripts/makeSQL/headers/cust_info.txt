@@ -1,0 +1,1 @@
+data_date,cust_core_no,ch_name,sex,age,birth_date,constellation,mobile_phone,cert_type,cert_no,fin_risk_rating
