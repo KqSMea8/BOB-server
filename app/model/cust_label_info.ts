@@ -23,7 +23,6 @@ module.exports = (app: Application) => {
       cust_core_no: STRING,
       label_code: STRING,
       label_name: STRING,
-      label_type_code: STRING,
     },
     {
       freezeTableName: true,

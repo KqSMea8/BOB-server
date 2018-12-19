@@ -15,7 +15,7 @@ module.exports = (app: Application) => {
       mobile_phone: STRING,
       cert_type: STRING,
       cert_no: STRING,
-      fin_risk_rating: STRING,
+      fin_risk_rating: STRING
     },
     {
       freezeTableName: true,
