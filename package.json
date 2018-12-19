@@ -19,7 +19,11 @@
     "autod": "autod",
     "lint": "tslint --project . -c tslint.json",
     "clean": "ets clean",
-    "run": "bash scripts/makeSQL/run.sh 127.0.0.1 root 123456"
+    "makeSQL": "bash scripts/makeSQL/makeSQL.sh",
+    "importSQL": "bash scripts/makeSQL/importSQL.sh 127.0.0.1 root 123456 scripts/makeSQL/sql",
+    "start-ws": "pm2 start app/BOB/server.js --name=bob-server",
+    "restart-ws": "pm2 restart bob-server",
+    "stop-ws": "pm2 delete bob-server"
   },
   "dependencies": {
     "egg": "^2.14.1",
@@ -40,6 +44,7 @@
     "egg-mock": "^3.16.0",
     "egg-ts-helper": "^1.11.0",
     "lodash": "^4.17.11",
+    "pm2": "^3.2.3",
     "tslib": "^1.9.3",
     "tslint": "^4.0.0",
     "typescript": "^3.2.2"
