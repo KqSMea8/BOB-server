@@ -10,6 +10,9 @@ export default () => {
     port: 3306,
     username: 'root',
     password: 'foobar',
+    define: {
+      timestamps: false,
+    },
   };
 
   return config;
