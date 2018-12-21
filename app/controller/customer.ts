@@ -22,7 +22,7 @@ export default class extends Controller {
       },
     });
     ctx.body = {
-      status: 0,
+      status: cust ? 0 : 1,
       data: cust ? cust : false,
     };
   }
