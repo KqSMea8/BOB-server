@@ -5,11 +5,11 @@ export default () => {
 
   config.sequelize = {
     dialect: 'mysql', // support: mysql, mariadb, postgres, mssql
-    database: 'bob',
-    host: 'localhost',
+    database: 'qrqms_db',
+    host: '10.160.2.136',
     port: 3306,
     username: 'root',
-    password: 'foobar',
+    password: 'metadata@Tbds.com',
     define: {
       timestamps: false,
     },
