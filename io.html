@@ -1,0 +1,15 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script>
+  const socket = io('http://localhost:8004', {
+
+    // 实际使用中可以在这里传递参数
+    query: {},
+
+    transports: ['websocket']
+  });
+
+  socket.on('connect', function () {
+socket.emit('message', 'backToIndex')
+  });
+
+</script>

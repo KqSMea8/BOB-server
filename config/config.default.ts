@@ -19,13 +19,22 @@ export default (appInfo: EggAppInfo) => {
 
   config.static = {
     prefix: '/',
-    dir: path.join(appInfo.baseDir, 'app/BOB'),
+    dir: path.join(appInfo.baseDir, 'app/public'),
   };
 
   config.security = {
     csrf: false,
   };
 
+  config.io = {
+    init: {}, // passed to engine.io
+    namespace: {
+      '/': {
+        connectionMiddleware: [],
+        packetMiddleware: [],
+      },
+    },
+  };
   // add your special config in here
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,

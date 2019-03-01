@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>北京银行</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="./css/font.css">
+	<link rel="stylesheet" type="text/css" href="./css_2/main.css" media="screen" />
+	<link rel="stylesheet" href="./css_2/transitions.css">
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/TweenMax.min.js"></script>
+	<script src="./js/Tween.min.js"></script>
+	<script src="./js/three2.min.js"></script>
+	<script src="./js/countUp.js"></script>
+	<script src="./js/animateProgress.js"></script>
+	<script src="./js/transition.js"></script>
+	<script src="./js/p5.js" type="text/javascript"></script>
+	<script src="./js/p5.sound.js" type="text/javascript"></script>
+	<!-- <script src="./js/p5.dom.js" type="text/javascript"></script> -->
+	<script src="./js/welcome.js" type="text/javascript"></script>
+s
+  <style>
+		 	body {
+				padding: 0;
+				margin: 0;
+				z-index: -30;
+			}
+			canvas{
+				z-index:-1;
+			}
+			#darkBackground canvas {
+				vertical-align: top;
+				z-index:0;
+				position: absolute;
+				left:0%;
+				top:35%;
+			}
+			.welcome{
+					text-align: center;
+					margin: auto;
+					position: absolute;
+					left:50%;
+					top:50%;
+					z-index: 0;
+				}
+			</style>
+	<!-- <script src='https://isuttell.github.io/sine-waves/javascripts/sine-waves.min.js'></script> -->
+</head>
+
+<body>
+	<div id="darkBackground"></div>
+	<div class="page-transition">
+		<div class="transition-item"></div>
+		<div class="transition-item"></div>
+		<div class="transition-item"></div>
+		<div class="transition-item"></div>
+	</div>
+					<h1 class="welcome">您好，欢迎来到北京银行。</h1>
+	<div class="">
+		<ul>
+			<li class="item" id="firstli">欢迎页面<span class="smallText">WELCOME<span /></li>
+			<li class="item">千人千面<span class="smallText">LUSHANZHENMIAN<span /></li>
+			<li class="item">登录认证<span class="smallText">LOG IN<span /></li>
+			<li class="item">添加用户<span class="smallText">TIANJIAYONGHU<span /></li>
+		</ul>
+	</div>
+	<script src="./js/transition.js"></script>
+	<script src="./js/scene.js"></script>
+	<script type="text/javascript">
+		(function () {
+			setTimeout(() => {
+				$('ul').css('opacity', '1');
+			}, 500);
+			TweenMax.staggerFrom(".item", 0.5, {
+				opacity: 0,
+				y: -100,
+				delay: 0.5,
+				ease: Back.easeIn
+			}, 0.2)
+		}).call(this);
+	</script>
+</body>
+
+</html>

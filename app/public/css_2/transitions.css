@@ -1,0 +1,28 @@
+body .page-transition {
+  background: #0b121e;
+}
+
+body .page-transition .transition-item {
+  position: fixed;
+  background-color: #0b121e;
+  height: 100%;
+  bottom: 0%;
+  width: 25%;
+  z-index: 99999999;
+}
+
+body .page-transition .transition-item:nth-child(1) {
+  left: 0px;
+}
+
+body .page-transition .transition-item:nth-child(2) {
+  left: 25%;
+}
+
+body .page-transition .transition-item:nth-child(3) {
+  left: 50%;
+}
+
+body .page-transition .transition-item:nth-child(4) {
+  left: 75%;
+}

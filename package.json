@@ -7,13 +7,13 @@
     "typescript": true
   },
   "scripts": {
-    "start": "npm run tsc && egg-scripts start --daemon --env=prod --title=egg-server-BOB-server",
+    "start": "npm run tsc && egg-scripts start --daemon --env=prod --title=egg-server-BOB-server --sticky",
     "stop": "egg-scripts stop --title=egg-server-BOB-server && npm run clean",
-    "dev": "egg-bin dev -r egg-ts-helper/register",
-    "debug": "egg-bin debug -r egg-ts-helper/register",
-    "test-local": "egg-bin test -r egg-ts-helper/register",
+    "dev": "egg-bin dev -r egg-ts-helper/register --sticky",
+    "debug": "egg-bin debug -r egg-ts-helper/register --sticky",
+    "test-local": "egg-bin test -r egg-ts-helper/register --sticky",
     "test": "npm run lint -- --fix && npm run test-local",
-    "cov": "egg-bin cov -r egg-ts-helper/register",
+    "cov": "egg-bin cov -r egg-ts-helper/register --sticky",
     "tsc": "ets && tsc -p tsconfig.json",
     "ci": "npm run lint && npm run cov && npm run tsc",
     "autod": "autod",

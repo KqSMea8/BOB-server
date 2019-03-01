@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>北京银行</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="./css/font.css">
+	<link rel="stylesheet" type="text/css" href="./css/font2.css">
+	<link rel="stylesheet" type="text/css" href="./css_2/mainp.css" media="screen" />
+	<link rel="stylesheet" href="./css_2/transitions.css">
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/TweenMax.min.js"></script>
+	<script src="./js/Tween.min.js"></script>
+	<script src="./js/three2.min.js"></script>
+	<script src="./js/Chart.js"></script>
+	<script src="./js/jquery-ui.min.js"></script>
+	<script src="./js/progressbar.min.js"></script>
+	<!-- <script src='https://isuttell.github.io/sine-waves/javascripts/sine-waves.min.js'></script> -->
+</head>
+
+<body>
+	<div id="app">
+		<div id="part_1"></div>
+		<div id="part_2"></div>
+		<div id="part_3"></div>
+		<div id="part_4"></div>
+		<div id="part_5"></div>
+
+		<div id="darkBackground"></div>
+		<div class="page-transition">
+			<div class="transition-item"></div>
+			<div class="transition-item"></div>
+			<div class="transition-item"></div>
+			<div class="transition-item"></div>
+		</div>
+		<img class="user_dot" src="./assets/user_dot.png" alt="">
+		<div class="mask" style="position: absolute; top: 0; width:100%; height: 100%; opacity: 0; z-index: 1; transition: opacity 0.5s ease-in-out">
+			<img style="width: 100%; height: 100%;" src="./assets/mask.png" alt="">
+		</div>
+		<div class="topMenu">
+			<img class="button_normal" id="button1" src="./assets/button_highlighted.png" alt="">
+			<img class="button_normal" id="button2" src="./assets/button_highlighted.png" alt="">
+			<img class="button_normal" id="button3" src="./assets/button_highlighted.png" alt="">
+		</div>
+
+		<img class="blue_figure" src="./assets/blue_figure.png" alt="">
+
+		<div class="chart_bg" style="opacity: 0;transition: opacity 1s ease-in-out;transition-delay: 1.2s;">
+			<h1 id="ch_name">{{ username }}</h1>
+			<div v-if="labels">
+				<!-- <div v-for="label in labels" :key="label" class="labels">
+					<p id="lt1">{{ label }}</p>
+					<img class="label" id="label1" src="./assets/label.png" alt="">
+				</div> -->
+				<div class="labels">
+					<p id="lt1">{{ labels[0] }}</p>
+					<img class="label" id="label1" src="./assets/label.png" alt="">
+				</div>
+				<div class="labels">
+					<p id="lt2">{{ labels[1] }}</p>
+					<img class="label" id="label2" src="./assets/label.png" alt="">
+				</div>
+				<div class="labels">
+					<p id="lt3">{{ labels[2] }}</p>
+					<img class="label" id="label3" src="./assets/label.png" alt="">
+				</div>
+			</div>
+
+			<div class="chart" id="chart_1">
+				<p style="position: absolute; top: -20px; left: -150px;">Devices</p>
+			</div>
+			<div class="chart" id="chart_2">
+				<canvas id="bar_chart"></canvas>
+			</div>
+
+			<ul id="person_info" v-if="user">
+				<li><span>核心客户号:</span><span id="cust_core_no">{{ user.cust_core_no }}</span></li>
+				<li><span>性别: </span><span id="age">{{ user.sex === '2' ? '女' : '男' }}</span></li>
+				<li><span>年龄:</span><span id="age">{{ user.age }}</span></li>
+				<li><span>星座:</span><span id="constellation">{{ user.constellation }}</span></li>
+				<li><span>证件号码:</span><span id="cert_no">******{{ user.cert_no.slice(6, 14) }}****</span></li>
+				<li><span>理财风险等级:</span><span id="fin_risk_rating">{{ makeStars(Number(user.fin_risk_rating)) }}</span></li>
+				<!-- <li><span>月收入金额:</span><span id="monthly_in_balance">{{ user.debtCardBills[0] ?
+						user.debtCardBills[0].monthly_in_balance : '' }}</span></li> -->
+
+			</ul>
+			<canvas id="pie-chart" width="400" height="400" style="height: 400px;width: 400px;"></canvas>
+			<img class="bg_img" src="./assets/chart_outline1.png" alt="">
+		</div>
+		<div class="menu">
+			<ul>
+				<li class="item">欢迎页面<span class="smallText">WELCOME<span /></li>
+				<li class="item">千人千面<span class="smallText">LUSHANZHENMIAN<span /></li>
+				<li class="item" :id="fromTianjia ? '' : 'firstli'">登录认证<span class="smallText">LOG IN<span /></li>
+				<li class="item" :id="fromTianjia ? 'firstli' : ''">添加用户<span class="smallText">TIANJIAYONGHU<span /></li>
+			</ul>
+		</div>
+	</div>
+	<script src="./js/vendor/vue.min.js"></script>
+	<script>
+		// 用vue做数据绑定
+		const app = new Vue({
+			el: '#app',
+			data() {
+				return {
+					user: null,
+				}
+			},
+			computed: {
+				fromTianjia() {
+					let params = (new URL(document.location)).searchParams;
+					return params.get('tianjia') === '1'
+				},
+				username() {
+					return this.user ? this.user.ch_name : null
+				},
+				certNo() {
+					return this.user ? this.user.cert_no : null
+				},
+				labels() {
+					return this.user ? this.user.labelInfos.map(o => o.label_name) : null
+				},
+			},
+			created() {
+				let params = (new URL(document.location)).searchParams;
+				if (!this.fromTianjia) {
+					// 使用原生xhr发送get请求
+					var xhr = new XMLHttpRequest();
+					console.log(params)
+					xhr.open('GET', `/api/customer/getInfo?custCoreNo=${params.get('custCoreNo')}`);
+					xhr.send();
+					xhr.onreadystatechange = () => {
+						if (xhr.readyState == 4 && xhr.status == 200) {
+							const response = JSON.parse(xhr.responseText)
+							if (!response.status) {
+								this.user = response.data
+								console.log(this.user)
+							} else {
+								// 错误提示
+								alert(response.message);
+							}
+						}
+					};
+					this.$nextTick(() => {
+						this.makeBarChart()
+						this.makePieChart()
+					})
+				} else {
+					this.user = {
+						"id": 1,
+						"data_date": "2018-12-03",
+						"cust_core_no": `00000000${parseInt(Math.random() * 1000000)}`,
+						"ch_name": params.get('username'),
+						"sex": parseInt(Math.random() * 2 + 1).toString(),
+						"age": params.get('age') ? params.get('age') : parseInt(Math.random() * 30 + 20),
+						"birth_date": "19940802",
+						"constellation": "处女座",
+						"mobile_phone": "13501164720",
+						"cert_type": "01",
+						"cert_no": params.get('certNo'),
+						"fin_risk_rating": parseInt(Math.random() * 2 + 1),
+						"assetsRatings": [{
+							// "id": 1,
+							// "data_date": "2018-12-03",
+							// "cust_core_no": "000000006648764",
+							// "cust_name": "谈晓颖",
+							// "cert_type": "01",
+							// "cert_no": "110105197210012128",
+							// "branch_code": "00102",
+							"90d_balance_RMB": "1886697.17",
+							"90d_fund_RMB": "41630.85",
+							"90d_sg_RMB": "0.0",
+							"90d_saving_RMB": "243805.74",
+							"90d_Tbond_RMB": "0.0",
+							"90d_bbfin_RMB": "123274.54",
+							"90d_fbbfin_RMB": "1479452.83",
+							"90d_sx_RMB": "0.0",
+							"90d_assets_RMB": "1888163.96",
+							"assets_rating": "10",
+							"balance_RMB": "1996376.35",
+							"gbcard_90d": "1888163.96",
+							"gbcard_type": "3",
+							"gbcard_level": "10",
+							"mscard_90d": "0.0",
+							"mscard_type": "",
+							"mscard_level": "",
+							"yjxcard_90d": "1888163.96",
+							"yjxcard_type": "5",
+							"yjxcard_level": "30",
+							"srcard_90d": "0.0",
+							"srcard_type": "",
+							"srcard_level": "",
+							"max_card_level": "10",
+							"addr": "北京北京市东城区建国门内大街中纺大厦",
+							"tele_phone": "8665281122",
+							"mobile_phone": "13501164720"
+						}],
+						"debtCardBills": [{
+							"id": 5,
+							"trade_date": "201811",
+							"cust_core_no": "000000006648764",
+							"monthly_in_balance": "204049.60000038147",
+							"n_monthly_in_balance": "14",
+							"monthly_out_balance": "196540.50872802734",
+							"n_monthly_out_balance": "3",
+							"monthly_cjwy_transfer": "0",
+							"n_monthly_cjwy_transfer": "0",
+							"monthly_edzf_transfer": "150000.0",
+							"n_monthly_edzf_transfer": "1",
+							"monthly_bb_fp": "20000.0",
+							"n_monthly_bb_fp": "2",
+							"monthly_fbb_fp": "300000.0",
+							"n_monthly_fbb_fp": "2",
+							"monthly_fund": "40000.0",
+							"n_monthly_fund": "1",
+							"monthly_hn_transfer": "343.0",
+							"n_monthly_hn_transfer": "1",
+							"monthly_pos": "0",
+							"n_monthly_pos": "0",
+							"monthly_debt": "0",
+							"n_monthly_debt": "0"
+						}],
+						"labelInfos": [{
+							"id": 1,
+							"cust_core_no": "000000006648764",
+							"label_code": "03004",
+							"label_name": "进取型"
+						}, {
+							"id": 30,
+							"cust_core_no": "000000006648764",
+							"label_code": "01002",
+							"label_name": "高富帅"
+						}, {
+							"id": 43,
+							"cust_core_no": "000000006648764",
+							"label_code": "02006",
+							"label_name": "手机达人"
+						}, {
+							"id": 67,
+							"cust_core_no": "000000006648764",
+							"label_code": "04001",
+							"label_name": "忠诚客户"
+						}, {
+							"id": 82,
+							"cust_core_no": "000000006648764",
+							"label_code": "02005",
+							"label_name": "诚信达人"
+						}, {
+							"id": 93,
+							"cust_core_no": "000000006648764",
+							"label_code": "02007",
+							"label_name": "网银达人"
+						}, {
+							"id": 114,
+							"cust_core_no": "000000006648764",
+							"label_code": "02002",
+							"label_name": "存款达人"
+						}, {
+							"id": 134,
+							"cust_core_no": "000000006648764",
+							"label_code": "02001",
+							"label_name": "理财达人"
+						}, {
+							"id": 148,
+							"cust_core_no": "000000006648764",
+							"label_code": "06002",
+							"label_name": "剁手党"
+						}, {
+							"id": 164,
+							"cust_core_no": "000000006648764",
+							"label_code": "05001",
+							"label_name": "高收入"
+						}, {
+							"id": 211,
+							"cust_core_no": "000000006648764",
+							"label_code": "02004",
+							"label_name": "产品达人"
+						}]
+					}
+					console.log(this.user)
+				}
+			},
+			methods: {
+				makeStars(n) {
+					if (n === 0) {
+						return ''
+					} else {
+						return this.makeStars(n - 1) + '★'
+					}
+				},
+				makeBarChart() {
+					var ctx = document.getElementById("bar_chart");
+					if (!ctx) return
+					var myChart = new Chart(ctx, {
+						type: 'bar',
+						data: {
+							labels: ['18-24', '25-34', '35-44', '45-54', '55-64', '65+'],
+							datasets: [{
+								label: 'age',
+								data: [100, 87, 86, 57, 39, 63],
+								backgroundColor: 'rgba(78, 216, 218, 1)',
+								borderColor: 'rgba(50,50,50,1)',
+								borderWidth: 0
+							}]
+						},
+						options: {
+							scales: {
+								yAxes: [{
+									ticks: {
+										beginAtZero: true
+									}
+								}]
+							}
+						}
+					});
+				},
+				makePieChart() {
+					var ctx = document.getElementById("pie_chart");
+					if (!ctx) return
+					var myChart = new Chart(ctx, {
+						type: 'bar',
+						data: {
+							labels: ['18-24', '25-34', '35-44', '45-54', '55-64', '65+'],
+							datasets: [{
+								label: 'age',
+								data: [100, 87, 86, 57, 39, 63],
+								backgroundColor: 'rgba(78, 216, 218, 1)',
+								borderColor: 'rgba(50,50,50,1)',
+								borderWidth: 0
+							}]
+						},
+						options: {
+							scales: {
+								yAxes: [{
+									ticks: {
+										beginAtZero: true
+									}
+								}]
+							}
+						}
+					});
+				}
+			}
+		})
+
+	</script>
+	<script src="./js/transition.js"></script>
+	<script src="./js/scene.js"></script>
+	<script src="./js/vendor/socket.io.js"></script>
+	<script src="./js/globalhandShake.js"></script>
+	<script src="./js/personaHandShake.js"></script>
+	<script src="./js/findUser.js"></script>
+	<script src="./js/personaCharts.js"></script>
+	<script type="text/javascript">
+		(function () {
+			setTimeout(() => {
+				$('ul').css('opacity', '1');
+			}, 500);
+			TweenMax.staggerFrom(".item", 0.5, {
+				opacity: 0,
+				y: -100,
+				delay: 0.5,
+				ease: Back.easeIn
+			}, 0.2)
+		}).call(this);
+
+	</script>
+</body>
+
+</html>

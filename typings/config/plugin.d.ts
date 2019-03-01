@@ -4,3 +4,4 @@
 import 'egg';
 import 'egg-sequelize';
 import 'egg-validate';
+import 'egg-socket.io';

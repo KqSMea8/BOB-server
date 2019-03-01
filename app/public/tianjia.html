@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>北京银行</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="./css/font.css">
+	<!-- <link rel="stylesheet" type="text/css" href="./css_2/main.css" media="screen" /> -->
+	<link rel="stylesheet" type="text/css" href="./css_2/mainp.css" media="screen" />
+	<link rel="stylesheet" href="./css_2/transitions.css">
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/TweenMax.min.js"></script>
+	<script src="./js/Tween.min.js"></script>
+	<script src="./js/three2.min.js"></script>
+
+	<!-- <script src='https://isuttell.github.io/sine-waves/javascripts/sine-waves.min.js'></script> -->
+</head>
+
+<body>
+	<div class="adding-new-user">
+		<h3>您好,</h3>
+		<h3>正在录入您的信息...</h3>
+		<h3>正在将您添加到云海系统...</h3>
+	</div>
+	<div id="darkBackground"></div>
+	<div class="page-transition">
+		<div class="transition-item"></div>
+		<div class="transition-item"></div>
+		<div class="transition-item"></div>
+		<div class="transition-item"></div>
+	</div>
+	<img class="blue_figure" src="./assets/blue_figure.png" alt="">
+	<div class="chart_bg" style="opacity: 0;transition: opacity 1s ease-in-out;transition-delay: 1.2s;">
+		<h1 id="ch_name">朱家慧</h1>
+		<div v-if="labels">
+			<!-- <div v-for="label in labels" :key="label" class="labels">
+				<p id="lt1">{{ label }}</p>
+				<img class="label" id="label1" src="./assets/label.png" alt="">
+			</div> -->
+			<div class="labels">
+				<p id="lt1">保险型</p>
+				<img class="label" id="label1" src="./assets/label.png" alt="">
+			</div>
+			<div class="labels">
+				<p id="lt2">理财达人</p>
+				<img class="label" id="label2" src="./assets/label.png" alt="">
+			</div>
+			<div class="labels">
+				<p id="lt3">科技达人</p>
+				<img class="label" id="label3" src="./assets/label.png" alt="">
+			</div>
+		</div>
+
+		<div class="chart" id="chart_1">
+			<p style="position: absolute; top: -20px; left: -150px;">Devices</p>
+		</div>
+		<div class="chart" id="chart_2">
+			<canvas id="bar_chart"></canvas>
+		</div>
+
+		<ul id="person_info" v-if="user">
+			<li><span>核心客户号:</span><span id="cust_core_no">099935627</span></li>
+			<li><span>性别: </span><span id="age">男</span></li>
+			<li><span>年龄:</span><span id="age">25</span></li>
+			<li><span>星座:</span><span id="constellation">处女座</span></li>
+			<li><span>证件号码:</span><span id="cert_no">637829199305691823</span></li>
+			<li><span>理财风险等级:</span><span id="fin_risk_rating">★★</span></li>
+			<!-- <li><span>月收入金额:</span><span id="monthly_in_balance">{{ user.debtCardBills[0] ?
+					user.debtCardBills[0].monthly_in_balance : '' }}</span></li> -->
+
+		</ul>
+		<canvas id="pie-chart" width="400" height="400" style="height: 400px;width: 400px;"></canvas>
+		<img class="bg_img" src="./assets/chart_outline1.png" alt="">
+	</div>
+	<div class="">
+		<ul>
+			<li class="item">欢迎页面<span class="smallText">WELCOME<span /></li>
+			<li class="item">千人千面<span class="smallText">LUSHANZHENMIAN<span /></li>
+			<li class="item">登录认证<span class="smallText">LOG IN<span /></li>
+			<li class="item" id="firstli">添加用户<span class="smallText">TIANJIAYONGHU<span /></li>
+		</ul>
+	</div>
+	<div id="overlay" style="opacity: 0;position: absolute;width: 100%;height: 100%;background-color: rgba(0, 41, 84, 1);transition: all 0.3s">
+	</div>
+	<script src="./js/transition.js"></script>
+	<script src="./js/scene.js"></script>
+	<script src="./js/vendor/socket.io.js"></script>
+	<script src="./js/globalhandShake.js"></script>
+	<script src="./js/tianjiaHandShake.js"></script>
+</body>
+
+</html>

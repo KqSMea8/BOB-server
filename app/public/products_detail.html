@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>北京银行</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="./css/font.css">
+	<link rel="stylesheet" type="text/css" href="./css/font2.css">
+	<link rel="stylesheet" type="text/css" href="./css_2/main.css" media="screen" />
+	<link rel="stylesheet" href="./css_2/transitions.css">
+	<script src="./js/jquery.min.js"></script>
+	<script src="./js/TweenMax.min.js"></script>
+	<script src="./js/Tween.min.js"></script>
+	<script src="./js/three2.min.js"></script>
+	<script src="./js/Chart.js"></script>
+	<script src="./js/jquery-ui.min.js"></script>
+	<script src="./js/progressbar.min.js"></script>
+	<script src="./js/vendor/moment.min.js"></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js'></script>
+</head>
+
+<body>
+	<div id="app">
+		<div class="animatedText">
+			<section class="mast">
+				<header class="mast__header">
+					<h1 class="mast__title js-spanize">欢迎登录北京银行数据系统。</h1>
+					<hr class="sep" />
+					<p class="mast__text js-spanize">
+						用户认证并初始化成功，正在寻找用户。。。</p>
+					<p class="mast__text js-spanize"> You are logged in, initializing and querying user information...</p>
+				</header>
+			</section>
+		</div>
+		<div id="darkBackground"></div>
+		<div class="page-transition">
+			<div class="transition-item"></div>
+			<div class="transition-item"></div>
+			<div class="transition-item"></div>
+			<div class="transition-item"></div>
+		</div>
+		<img class="user_dot" src="./assets/user_dot.png" alt="">
+		<div class="topMenu">
+			<img class="button_normal" src="./assets/button_highlighted.png" alt="">
+			<img class="button_normal" src="./assets/button_highlighted.png" alt="">
+			<img class="button_normal" src="./assets/button_highlighted.png" alt="">
+		</div>
+		<img class="blue_figure" src="./assets/blue_figure.png" alt="">
+		<p class="mainWords">推荐产品{{ productIndex + 1 }}</p>
+		<div class="charts">
+			<ul id="p_info">
+				<span>
+					<li><span>产品名称: </span><span id="p_name">{{ product.name }}</span></li>
+					<li><span>产品代码: </span><span id="p_no">{{ product.code }}</span></li>
+					<li>
+						<span v-if="product.type === '在售开放式产品'">交易日</span>
+						<span v-else>预约期/募集期: </span>
+						<span id="p_date" v-if="product.type === '预期收益型'">
+							{{ product.recruitmentPeriod[0] }} - {{ product.recruitmentPeriod[1]
+							}}</span>
+						<span id="p_date" v-else>
+							{{ product.recruitmentPeriod }}</span>
+					</li>
+					<li><span>预期收益率: </span><span id="p_balance">{{ product.expectReturn }}</span></li>
+				</span>
+			</ul>
+			<div class="bg_img">
+				<img src="./assets/chart_outline3.png" alt="">
+				<div class="userName">
+					<h1>您好，{{ username }}</h1>
+				</div>
+				<div id="canvas-holder" style="width: 300px;">
+					<canvas id="chart-area">
+					</canvas>
+				</div>
+				<div id="qigoujine">
+					<h3>{{ product.amount }}</h3>
+				</div>
+				<div id="fengxiandengji">
+					<span v-for="(star, i) in makeBars(product.riskLevel)" :key="i">
+						★
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="menu">
+			<ul>
+				<li class="item">欢迎页面<span class="smallText">WELCOME<span /></li>
+				<li class="item">千人千面<span class="smallText">LUSHANZHENMIAN<span /></li>
+				<li class="item" id="firstli">登录认证<span class="smallText">LOG IN<span /></li>
+				<li class="item">添加用户<span class="smallText">TIANJIAYONGHU<span /></li>
+			</ul>
+		</div>
+	</div>
+	<script src="./js/vendor/socket.io.js"></script>
+	<script src="./js/globalhandShake.js"></script>
+	<script src="./js/vendor/vue.min.js"></script>
+	<script>
+		// 用vue做数据绑定
+		const app = new Vue({
+			el: '#app',
+			data() {
+				return {
+					user: null,
+					selectProducs: [],
+					products: [{
+						type: '在售开放式产品',
+						name: '天天盈 1 号',
+						code: 'G011209150',
+						amount: '1 万',
+						expectReturn: '3.3%',
+						recruitmentPeriod: '工作日（9:00-15:15)',
+						riskLevel: 1
+					}, {
+						type: '净值型',
+						name: '七日淘金',
+						code: 'TG01160101',
+						amount: '1 万',
+						expectReturn: '4.7%',
+						recruitmentPeriod: '每日',
+						riskLevel: 2
+					}, {
+						type: '净值型',
+						name: '京华远见薪满益足',
+						code: 'TG01170302',
+						amount: '1 万',
+						expectReturn: '4.7%',
+						recruitmentPeriod: '每日',
+						riskLevel: 2
+					}, {
+						type: '预期收益型',
+						name: '90 天保证收益',
+						code: 'GRB1812006',
+						amount: '5/10 万',
+						expectReturn: '3.65%/3.7%',
+						recruitmentPeriod: [moment().add(1, 'days').format('YYYY/MM/DD'), moment().add(7, 'days').format(
+							'YYYY/MM/DD')],
+						riskLevel: 1
+					}],
+					productIndex: 0
+				}
+			},
+			computed: {
+				username() {
+					return this.user ? this.user.ch_name : null
+				},
+				labels() {
+					return this.user ? this.user.labelInfos.map(o => o.label_name) : null
+				},
+				product() {
+					return this.selectProducs[this.productIndex]
+				},
+			},
+			created() {
+				// 初始化选择的理财产品
+				this.randomProduct()
+				let params = (new URL(document.location)).searchParams;
+				this.productIndex = Number(params.get('product'))
+				// 使用原生xhr发送get请求
+				var xhr = new XMLHttpRequest();
+				xhr.open('GET', `/api/customer/getInfo?custCoreNo=${params.get('custCoreNo')}`);
+				xhr.send();
+				xhr.onreadystatechange = () => {
+					if (xhr.readyState == 4 && xhr.status == 200) {
+						const response = JSON.parse(xhr.responseText)
+						if (!response.status) {
+							this.user = response.data
+							this.$nextTick(() => {
+								this.initChartArea()
+							})
+						} else {
+							// 错误提示
+							alert(response.message);
+						}
+					}
+				};
+				this.initHankShale()
+			},
+			methods: {
+				randomProduct() {
+					this.selectProducs = []
+					this.products.forEach(product => {
+						if (Math.random() > 0.5) this.selectProducs.push(product)
+						else this.selectProducs.unshift(product)
+					})
+				},
+				makeBars(n) {
+					if (n === 0) {
+						return ''
+					} else {
+						return this.makeBars(n - 1) + '★'
+					}
+				},
+				initHankShale() {
+					// var receivedDataStrings = ['理财风险等级', '储蓄存款', '职业', '交易金额', '90天日均余额', '余额折人民币', '贵品卡90天日均', '贵宾卡级别代码',
+					// 	'私人银行90天日均',
+					// 	'最高持卡级别', '贷款金额', '贷款类型', '五级分类状态', '24月还款状态', '当前余额', '透支金额', '信用卡最高卡种级别', '医保状态代码', '月收入余额', '月支出余额',
+					// 	'月流出金额',
+					// 	'月流出笔数', '借记卡明细状态', '产品特征', '注册资本折人民币', '不良贷款合计', '购买历史', '累计债务重合次数', '总费用', '购买次数'
+					// ];
+
+					socket.on('message', function (msg) {
+						doSlideDown(msg, () => {
+							var json = {
+								data: msg
+							};
+							const updateGraphs = (index) => {
+								// bar.animate(Math.random());
+								// bar2.animate(Math.random());
+								// $('#chart_2').addClass('is-not-visible');
+								this.productIndex = index
+							}
+							if (json.data.text === "product1") {
+								console.log(json.data.text);
+								updateGraphs(0);
+							} else if (json.data.text === "product2") {
+								console.log(json.data.text);
+								updateGraphs(1);
+							} else if (json.data.text === "product3") {
+								console.log(json.data.text);
+								updateGraphs(2);
+							}
+						})
+					})
+				},
+				initChartArea() {
+					const config = {
+						type: 'doughnut',
+						data: {
+							datasets: [{
+								data: [parseFloat(this.product.expectReturn), 100],
+								backgroundColor: [
+									"#64a6fa",
+									"#363b48"
+								],
+							}]
+						},
+						options: {
+							cutoutPercentage: 65,
+							segmentShowStroke: false,
+							circumference: 1 * Math.PI,
+							rotation: -Math.PI,
+							elements: {
+								arc: {
+									borderWidth: 0
+								},
+								center: {
+									text: this.product.expectReturn,
+									color: '#fff',
+									fontStyle: 'Arial',
+									sidePadding: 10,
+									width: 800,
+									top: 20
+								}
+							}
+						}
+					};
+					const ctx = document.getElementById("chart-area").getContext("2d");
+					setTimeout(() => {
+						const myChart = new Chart(ctx, config);
+					}, 3000);
+				}
+			}
+		})
+
+	</script>
+	<script src="./js/transition.js"></script>
+	<script src="./js/scene.js"></script>
+	<script src="./js/customizeProgressBars.js"></script>
+	<script src="./js/labels.js"></script>
+	<script src="./js/lineChart.js"></script>
+	<!-- <script src="./js/findUser.js"></script> -->
+	<script type="text/javascript">
+		(function () {
+			setTimeout(() => {
+				$('ul').css('opacity', '1');
+			}, 500);
+			TweenMax.staggerFrom(".item", 0.5, {
+				opacity: 0,
+				y: -100,
+				delay: 0.5,
+				ease: Back.easeIn
+			}, 0.2)
+
+			setTimeout(() => {
+					$('.mainWords').css('opacity', '1');
+					$('.charts').css('opacity', '1');
+					$('.blue_figure').css('opacity', '1');
+
+					$('.userName').css({
+						'opacity': '1',
+						'transform': 'none'
+					});
+				},
+				2300);
+		}).call(this);
+
+	</script>
+</body>
+
+</html>
