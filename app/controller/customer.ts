@@ -58,4 +58,36 @@ export default class extends Controller {
       data: await ctx.service.customer.getInfo(custCoreNo),
     };
   }
+
+  public async getProductInfo() {
+    const { ctx } = this;
+    const { custCoreNo } = ctx.request.query;
+    const errors = this.app.validator.validate(
+      { custCoreNo: 'string' },
+      ctx.request.query,
+    );
+    if (errors) {
+      ctx.body = {
+        status: 1,
+        message: errors,
+      };
+      return;
+    }
+    const cust = await ctx.service.customer.findOne({
+      where: {
+        cust_core_no: custCoreNo,
+      },
+    });
+    if (!cust) {
+      ctx.body = {
+        status: 1,
+        message: 'no cust found!',
+      };
+      return;
+    }
+    ctx.body = {
+      status: 0,
+      data: await ctx.service.customer.getProductInfo(custCoreNo),
+    };
+  }
 }

@@ -80,7 +80,10 @@
 				<li><span>年龄:</span><span id="age">{{ user.age }}</span></li>
 				<li><span>星座:</span><span id="constellation">{{ user.constellation }}</span></li>
 				<li><span>证件号码:</span><span id="cert_no">******{{ user.cert_no.slice(6, 14) }}****</span></li>
-				<li><span>理财风险等级:</span><span id="fin_risk_rating">{{ makeStars(Number(user.fin_risk_rating)) }}</span></li>
+				<li><span>理财风险等级:</span>
+					<span v-if="user.fin_risk_rating === '0' || user.fin_risk_rating === 'NULL'">无</span>
+					<span v-else id="fin_risk_rating">{{ makeStars(Number(user.fin_risk_rating)) }}</span>
+				</li>
 				<!-- <li><span>月收入金额:</span><span id="monthly_in_balance">{{ user.debtCardBills[0] ?
 						user.debtCardBills[0].monthly_in_balance : '' }}</span></li> -->
 
@@ -286,7 +289,7 @@
 					if (n === 0) {
 						return ''
 					} else {
-						return this.makeStars(n - 1) + '★'
+						return this.makeStars((n > 5 ? 5 : n) - 1) + '★'
 					}
 				},
 				makeBarChart() {

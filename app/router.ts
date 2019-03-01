@@ -7,6 +7,10 @@ export default (app: Application) => {
 
   router.post('/api/customer/exist', controller.customer.exist);
   router.get('/api/customer/getInfo', controller.customer.getInfo);
+  router.get(
+    '/api/customer/getProductInfo',
+    controller.customer.getProductInfo,
+  );
 
   // socket.io
   io.of('/').route('message', io.controller.default.message);

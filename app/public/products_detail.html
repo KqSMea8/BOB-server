@@ -51,9 +51,9 @@
 		<div class="charts">
 			<ul id="p_info">
 				<span>
-					<li><span>产品名称: </span><span id="p_name">{{ product.name }}</span></li>
-					<li><span>产品代码: </span><span id="p_no">{{ product.code }}</span></li>
-					<li>
+					<li><span>产品名称: </span><span id="p_name" class="product-attr-label">{{ product.prd_name }}</span></li>
+					<li><span>产品代码: </span><span id="p_no" class="product-attr-label">{{ product.prd_code }}</span></li>
+					<!-- <li>
 						<span v-if="product.type === '在售开放式产品'">交易日</span>
 						<span v-else>预约期/募集期: </span>
 						<span id="p_date" v-if="product.type === '预期收益型'">
@@ -61,8 +61,8 @@
 							}}</span>
 						<span id="p_date" v-else>
 							{{ product.recruitmentPeriod }}</span>
-					</li>
-					<li><span>预期收益率: </span><span id="p_balance">{{ product.expectReturn }}</span></li>
+					</li> -->
+					<!-- <li><span>预期收益率: </span><span id="p_balance">{{ product.exp_income_rate }}</span></li> -->
 				</span>
 			</ul>
 			<div class="bg_img">
@@ -70,17 +70,23 @@
 				<div class="userName">
 					<h1>您好，{{ username }}</h1>
 				</div>
-				<div id="canvas-holder" style="width: 300px;">
+				<div id="canvas-holder" style="width: 250px; text-align: center;">
 					<canvas id="chart-area">
 					</canvas>
+					<span class="product-attr-label">预期收益率</span>
 				</div>
 				<div id="qigoujine">
-					<h3>{{ product.amount }}</h3>
+					<h3>{{ (product.pfirst_amt / 10000).toFixed(0) }}万</h3>
+					<span class="product-attr-label">起购金额</span>
 				</div>
 				<div id="fengxiandengji">
-					<span v-for="(star, i) in makeBars(product.riskLevel)" :key="i">
-						★
-					</span>
+					<div>
+						<span v-if="product.risk_level === '0' || product.risk_level === 'NULL'">无</span>
+						<span v-else v-for="(star, i) in makeBars(Number(product.risk_level))" :key="i">
+							★
+						</span>
+					</div>
+					<span class="product-attr-label">风险等级</span>
 				</div>
 			</div>
 		</div>
@@ -95,8 +101,28 @@
 	</div>
 	<script src="./js/vendor/socket.io.js"></script>
 	<script src="./js/globalhandShake.js"></script>
+	<script src="./js/productDetailHandShake.js"></script>
 	<script src="./js/vendor/vue.min.js"></script>
 	<script>
+		const httpGet = (url) => {
+			return new Promise((resolve, reject) => {
+				var xhr = new XMLHttpRequest();
+				xhr.open('GET', url);
+				xhr.send();
+				xhr.onreadystatechange = () => {
+					if (xhr.readyState == 4 && xhr.status == 200) {
+						const response = JSON.parse(xhr.responseText)
+						if (!response.status) {
+							resolve(response.data)
+						} else {
+							// 错误提示
+							reject(response.message);
+						}
+					}
+				}
+			})
+		}
+
 		// 用vue做数据绑定
 		const app = new Vue({
 			el: '#app',
@@ -104,40 +130,7 @@
 				return {
 					user: null,
 					selectProducs: [],
-					products: [{
-						type: '在售开放式产品',
-						name: '天天盈 1 号',
-						code: 'G011209150',
-						amount: '1 万',
-						expectReturn: '3.3%',
-						recruitmentPeriod: '工作日（9:00-15:15)',
-						riskLevel: 1
-					}, {
-						type: '净值型',
-						name: '七日淘金',
-						code: 'TG01160101',
-						amount: '1 万',
-						expectReturn: '4.7%',
-						recruitmentPeriod: '每日',
-						riskLevel: 2
-					}, {
-						type: '净值型',
-						name: '京华远见薪满益足',
-						code: 'TG01170302',
-						amount: '1 万',
-						expectReturn: '4.7%',
-						recruitmentPeriod: '每日',
-						riskLevel: 2
-					}, {
-						type: '预期收益型',
-						name: '90 天保证收益',
-						code: 'GRB1812006',
-						amount: '5/10 万',
-						expectReturn: '3.65%/3.7%',
-						recruitmentPeriod: [moment().add(1, 'days').format('YYYY/MM/DD'), moment().add(7, 'days').format(
-							'YYYY/MM/DD')],
-						riskLevel: 1
-					}],
+					products: [],
 					productIndex: 0
 				}
 			},
@@ -149,47 +142,26 @@
 					return this.user ? this.user.labelInfos.map(o => o.label_name) : null
 				},
 				product() {
-					return this.selectProducs[this.productIndex]
+					return this.selectProducs[this.productIndex] || {}
 				},
 			},
-			created() {
-				// 初始化选择的理财产品
-				this.randomProduct()
+			async created() {
 				let params = (new URL(document.location)).searchParams;
 				this.productIndex = Number(params.get('product'))
 				// 使用原生xhr发送get请求
-				var xhr = new XMLHttpRequest();
-				xhr.open('GET', `/api/customer/getInfo?custCoreNo=${params.get('custCoreNo')}`);
-				xhr.send();
-				xhr.onreadystatechange = () => {
-					if (xhr.readyState == 4 && xhr.status == 200) {
-						const response = JSON.parse(xhr.responseText)
-						if (!response.status) {
-							this.user = response.data
-							this.$nextTick(() => {
-								this.initChartArea()
-							})
-						} else {
-							// 错误提示
-							alert(response.message);
-						}
-					}
-				};
+				this.user = await httpGet(`/api/customer/getInfo?custCoreNo=${params.get('custCoreNo')}`)
+				this.selectProducs = (await httpGet(`/api/customer/getProductInfo?custCoreNo=${params.get('custCoreNo')}`)).recomandProducts
+				this.$nextTick(() => {
+					this.initChartArea()
+				})
 				this.initHankShale()
 			},
 			methods: {
-				randomProduct() {
-					this.selectProducs = []
-					this.products.forEach(product => {
-						if (Math.random() > 0.5) this.selectProducs.push(product)
-						else this.selectProducs.unshift(product)
-					})
-				},
 				makeBars(n) {
-					if (n === 0) {
+					if (n === 0 || Number.isNaN(n)) {
 						return ''
 					} else {
-						return this.makeBars(n - 1) + '★'
+						return this.makeBars((n > 5 ? 5 : n) - 1) + '★'
 					}
 				},
 				initHankShale() {
@@ -229,7 +201,7 @@
 						type: 'doughnut',
 						data: {
 							datasets: [{
-								data: [parseFloat(this.product.expectReturn), 100],
+								data: [parseFloat(this.product.exp_income_rate), 100],
 								backgroundColor: [
 									"#64a6fa",
 									"#363b48"
@@ -246,7 +218,7 @@
 									borderWidth: 0
 								},
 								center: {
-									text: this.product.expectReturn,
+									text: this.product.exp_income_rate,
 									color: '#fff',
 									fontStyle: 'Arial',
 									sidePadding: 10,

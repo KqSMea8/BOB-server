@@ -40,7 +40,7 @@
       window.location.href = '/' + url + (data ? `?${data}` : '');
     }, 2000);
   }
-  
+
   //handle Lushan button on click
   function showWelcomeElements() {
     new TWEEN.Tween(camera.position).to({
@@ -69,7 +69,7 @@
         y: 0,
         z: 100
       }, 1000).easing(TWEEN.Easing.Quintic.InOut).start();
-      slideDown('lushan.html');
+      //   slideDown('lushan.html');
     }, 7500);
   }
 

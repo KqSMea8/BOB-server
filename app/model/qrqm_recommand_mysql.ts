@@ -3,22 +3,15 @@ module.exports = (app: Application) => {
   const { STRING } = app.Sequelize;
 
   return app.model.define(
-    'cust_info_bjyh_staff_mysql',
+    'qrqm_recommand_mysql',
     {
-      data_date: STRING,
       cust_core_no: {
         type: STRING,
         primaryKey: true,
       },
-      ch_name: STRING,
-      sex: STRING,
-      age: STRING,
-      birth_date: STRING,
-      constellation: STRING,
-      mobile_phone: STRING,
-      cert_type: STRING,
-      cert_no: STRING,
-      fin_risk_rating: STRING,
+      prd_code_1: STRING,
+      prd_code_2: STRING,
+      prd_code_3: STRING,
     },
     {
       freezeTableName: true,

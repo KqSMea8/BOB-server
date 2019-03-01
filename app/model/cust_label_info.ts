@@ -18,19 +18,17 @@ module.exports = (app: Application) => {
   // ];
 
   return app.model.define(
-    'cust_label_info',
+    'cust_label_info_bjyh_staff_mysql',
     {
-      cust_core_no: STRING,
+      cust_core_no: {
+        type: STRING,
+        primaryKey: true,
+      },
       label_code: STRING,
       label_name: STRING,
     },
     {
       freezeTableName: true,
-      indexes: [
-        {
-          fields: ['cust_core_no'],
-        },
-      ],
     },
   );
 };
