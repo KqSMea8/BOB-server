@@ -14,7 +14,7 @@
   function slideDown(url, data) {
     console.log(url, data)
     var pageDiv = document.getElementsByClassName('transition-item'),
-      slideDown = new TimelineMax({
+      _slideDown = new TimelineMax({
         paused: true
       }),
       slideUp = new TimelineMax({
@@ -24,7 +24,7 @@
         repeat: 0
       });
 
-    slideDown.staggerTo(pageDiv, 0.5, {
+    _slideDown.staggerTo(pageDiv, 0.5, {
       bottom: "0%",
       ease: Power2.easeIn
     }, 0.2);
@@ -35,7 +35,7 @@
       delay: 1
     }, 0.2);
 
-    loadAnimation.add(slideDown.play(), 0.5)
+    loadAnimation.add(_slideDown.play(), 0.5)
     setTimeout(function () {
       window.location.href = '/' + url + (data ? `?${data}` : '');
     }, 2000);
@@ -91,7 +91,7 @@
       console.log('going back to home page');
       slideDown('index.html');
     } else if (json.data.text === "initTianjia") {
-      console.log('initializing tianjia page');
+      console.log('initializing tianjia page', slideDown);
       slideDown('tianjia.html');
     } else {
       cb()
