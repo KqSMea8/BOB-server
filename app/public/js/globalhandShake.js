@@ -1,4 +1,4 @@
-  var socket = io('http://localhost:8004', {
+  var socket = io(`http://${location.host}`, {
 
     // 实际使用中可以在这里传递参数
     query: {},

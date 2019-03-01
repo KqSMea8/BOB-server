@@ -7,7 +7,7 @@
     "typescript": true
   },
   "scripts": {
-    "start": "npm run tsc && egg-scripts start --daemon --env=prod --title=egg-server-BOB-server --sticky",
+    "start": "npm run tsc && egg-scripts start --daemon --env=prod --workers=1 --title=egg-server-BOB-server --sticky",
     "stop": "egg-scripts stop --title=egg-server-BOB-server && npm run clean",
     "dev": "egg-bin dev -r egg-ts-helper/register --sticky",
     "debug": "egg-bin debug -r egg-ts-helper/register --sticky",
